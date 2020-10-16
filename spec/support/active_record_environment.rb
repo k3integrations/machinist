@@ -2,10 +2,12 @@ require 'active_record'
 require 'machinist/active_record'
 
 ActiveRecord::Base.establish_connection(
-  :adapter  => "mysql",
+  :adapter  => "mysql2",
   :database => "machinist",
-  :username => "root",
-  :password => ""
+  :username => "hephaestus",
+  :password => "ancientcode",
+  :host => "127.0.0.1",
+  :port => "6612",
 )
 
 ActiveRecord::Schema.define(:version => 0) do

@@ -5,14 +5,14 @@ describe Machinist::Blueprint do
 
   it "makes an object of the given class" do
     blueprint = Machinist::Blueprint.new(OpenStruct) { }
-    blueprint.make.should be_an(OpenStruct)
+    expect(blueprint.make).to be_an(OpenStruct)
   end
 
   it "constructs an attribute from the blueprint" do
     blueprint = Machinist::Blueprint.new(OpenStruct) do
       name { "Fred" }
     end
-    blueprint.make.name.should == "Fred"
+    expect(blueprint.make.name).to eq("Fred")
   end
 
   it "constructs an array for an attribute in the blueprint" do
@@ -20,10 +20,10 @@ describe Machinist::Blueprint do
       things(3) { Object.new }
     end
     things = blueprint.make.things
-    things.should be_an(Array)
-    things.should have(3).elements
-    things.each {|thing| thing.should be_an(Object) }
-    things.uniq.should == things
+    expect(things).to be_an(Array)
+    expect(things.size).to eq(3)
+    expect(things).to all(be_an(Object))
+    expect(things.uniq).to eq(things)
   end
 
   it "allows passing in attributes to override the blueprint" do
@@ -31,16 +31,16 @@ describe Machinist::Blueprint do
     blueprint = Machinist::Blueprint.new(OpenStruct) do
       name { block_called = true; "Fred" }
     end
-    blueprint.make(:name => "Bill").name.should == "Bill"
-    block_called.should be_false
+    expect(blueprint.make(:name => "Bill").name).to eq("Bill")
+    expect(block_called).to be false
   end
 
   it "provides a serial number within the blueprint" do
     blueprint = Machinist::Blueprint.new(OpenStruct) do
       name { "Fred #{sn}" }
     end
-    blueprint.make.name.should == "Fred 0001"
-    blueprint.make.name.should == "Fred 0002"
+    expect(blueprint.make.name).to eq("Fred 0001")
+    expect(blueprint.make.name).to eq("Fred 0002")
   end
 
   it "provides access to the object being constructed within the blueprint" do
@@ -48,14 +48,14 @@ describe Machinist::Blueprint do
       title { "Test" }
       body  { object.title }
     end
-    blueprint.make.body.should == "Test"
+    expect(blueprint.make.body).to eq("Test")
   end
 
   it "allows attribute names to be strings" do
     blueprint = Machinist::Blueprint.new(OpenStruct) do
       name { "Fred" }
     end
-    blueprint.make("name" => "Bill").name.should == "Bill"
+    expect(blueprint.make("name" => "Bill").name).to eq("Bill")
   end
 
   # These are normally a problem because of name clashes with the standard (but
@@ -69,8 +69,8 @@ describe Machinist::Blueprint do
       type { "custom type" }
     end
     object = blueprint.make
-    object.id.should == "custom id"
-    object.type.should == "custom type"
+    expect(object.id).to eq("custom id")
+    expect(object.type).to eq("custom type")
   end
 
 end

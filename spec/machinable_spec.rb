@@ -24,8 +24,8 @@ describe Machinist::Machinable do
     end
 
     post = MachinableSpecs::Post.make
-    post.should be_a(MachinableSpecs::Post)
-    post.title.should == "First Post"
+    expect(post).to be_a(MachinableSpecs::Post)
+    expect(post.title).to eq("First Post")
   end
 
   it "makes an object from a named blueprint" do
@@ -39,9 +39,9 @@ describe Machinist::Machinable do
     end
 
     post = MachinableSpecs::Post.make(:extra)
-    post.should be_a(MachinableSpecs::Post)
-    post.title.should == "Extra!"
-    post.body.should == "Woot!"
+    expect(post).to be_a(MachinableSpecs::Post)
+    expect(post.title).to eq("Extra!")
+    expect(post.body).to eq("Woot!")
   end
 
   it "makes an array of objects" do
@@ -50,11 +50,11 @@ describe Machinist::Machinable do
     end
 
     posts = MachinableSpecs::Post.make(3)
-    posts.should be_an(Array)
-    posts.should have(3).elements
+    expect(posts).to be_an(Array)
+    expect(posts.size).to eq(3)
     posts.each do |post|
-      post.should be_a(MachinableSpecs::Post)
-      post.title.should == "First Post"
+      expect(post).to be_a(MachinableSpecs::Post)
+      expect(post.title).to eq("First Post")
     end
   end
 
@@ -65,10 +65,10 @@ describe Machinist::Machinable do
     end
 
     post = MachinableSpecs::Post.make
-    post.comments.should be_a(Array)
-    post.comments.should have(3).elements
+    expect(post.comments).to be_a(Array)
+    expect(post.comments.size).to eq(3)
     post.comments.each do |comment|
-      comment.should be_a(MachinableSpecs::Comment)
+      expect(comment).to be_a(MachinableSpecs::Comment)
     end
   end
 
@@ -76,15 +76,15 @@ describe Machinist::Machinable do
     expect do
       MachinableSpecs::Post.make
     end.to raise_error(Machinist::NoBlueprintError) do |exception|
-      exception.klass.should == MachinableSpecs::Post
-      exception.name.should  == :master
+      expect(exception.klass).to eq(MachinableSpecs::Post)
+      expect(exception.name).to eq(:master)
     end
 
     expect do
       MachinableSpecs::Post.make(:some_name)
     end.to raise_error(Machinist::NoBlueprintError) do |exception|
-      exception.klass.should == MachinableSpecs::Post
-      exception.name.should  == :some_name
+      expect(exception.klass).to eq(MachinableSpecs::Post)
+      expect(exception.name).to eq(:some_name)
     end
   end
 
@@ -94,7 +94,7 @@ describe Machinist::Machinable do
     expect do
       MachinableSpecs::Post.make!
     end.to raise_error(Machinist::BlueprintCantSaveError) do |exception|
-      exception.blueprint.klass.should == MachinableSpecs::Post
+      expect(exception.blueprint.klass).to eq(MachinableSpecs::Post)
     end
   end
 

@@ -1,0 +1,27 @@
+version: '3'
+
+# An instance to make it easier to set up a test database
+# install docker-compose, then run `docker-compose up`
+# Note: if you mess around with the user and password, make sure to remove the
+# spec_machinist_mysql volume before trying something new (mysql will not
+# overwrite an existing database with new values for a user/password.)
+
+services:
+  db:
+    container_name: machinist
+    image: mysql:5.7.20
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: "yes"
+      MYSQL_DATABASE: machinist
+      MYSQL_USER: hephaestus
+      MYSQL_PASSWORD: ancientcode
+    ports:
+      - '127.0.0.1:6612:3306'
+    volumes:
+      - machinist_mysql:/var/lib/mysql
+
+volumes:
+  # the value of machinist_test is ok being empty
+  # see https://docs.docker.com/compose/compose-file/#volume-configuration-reference
+  machinist_mysql:
+
